@@ -20,5 +20,5 @@ def load_model(path):
         print(e)
 
 
-wpod_net_path = "wpod-net.json"
-wpod_net = load_model(wpod_net_path)
+# wpod_net_path = "wpod-net.json"
+# wpod_net = load_model(wpod_net_path)
