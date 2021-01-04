@@ -6,6 +6,7 @@ from local_utils import detect_lp
 from transfer import load_model
 from preprocessing import preprocess_image
 from get_plate import get_plate
+import matplotlib.gridspec as gridspec
 
 
 # 1. see what it looks like in different types: plate_image, gray, blur, binary,thre_mor
@@ -29,16 +30,17 @@ def DiffImage(LpImg):
 	
 ## test DiffImage
 
-
-### image test
-test_image_path = "Plate_examples/germany_car_plate.jpg"
-vehicle, LpImg,cor = get_plate(test_image_path)
-
+'''
 ### load model
 wpod_net_path = "wpod-net.json"
 wpod_net = load_model(wpod_net_path)
 
-plate_image,gray,blur,binary,dilation=DiffImage(LpImg)
+
+### image test
+test_image_path = "Plate_examples/germany_car_plate.jpg"
+vehicle, LpImg,cor = get_plate(wpod_net,test_image_path)
+
+plate_image,gray,blur,binary,thre_mor=DiffImage(LpImg)
 
 fig = plt.figure(figsize=(12,7))
 plt.rcParams.update({"font.size":18})
@@ -55,3 +57,4 @@ for i in range(len(plot_image)):
     else:
         plt.imshow(plot_image[i],cmap="gray")
 plt.show()
+'''

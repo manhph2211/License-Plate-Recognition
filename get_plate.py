@@ -14,7 +14,7 @@ def get_plate(wpod_net,image_path, Dmax=608, Dmin=256):
     side = int(ratio * Dmin)
     bound_dim = min(side, Dmax)
     _ , LpImg, _, cor = detect_lp(wpod_net, vehicle, bound_dim, lp_threshold=0.5)
-    return LpImg, cor
+    return vehicle,LpImg, cor
 
 
 # test
