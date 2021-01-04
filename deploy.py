@@ -26,7 +26,8 @@ def predict_from_model(image,model,labels):
   return prediction
 
 
-def demo(img):
+def demo(img_):
+  img=cv2.imread(img_)
   img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
   img = img/255
   wpod_net_path = "wpod-net.json"
@@ -51,10 +52,17 @@ def demo(img):
     title = np.array2string(predict_from_model(character,model,labels))
     final_string+=title.strip("'[]")
 
-  return 'Result: '+final_string
+  return img_,'Result: '+final_string
 
 
-iface = gr.Interface(demo, gr.inputs.Image(), "text")
+test_folder= 'Plate_examples'
+test_image_paths= [os.path.join(test_folder,x) for x in os.listdir(test_folder)]
+
+iface = gr.Interface(demo, 
+    [ gr.inputs.Radio(test_image_paths)],
+    ['image','text']
+)
+
 iface.launch()
 # test_image_path = "Plate_examples/germany_car_plate.jpg"
 # img=cv2.imread(test_image_path)
