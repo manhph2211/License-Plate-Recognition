@@ -69,7 +69,7 @@ def sort_contours(cnts,reverse = False):
                                         key=lambda b: b[1][i], reverse=reverse))
     return cnts
 
-def get_Crop_Letter(wpod_net,test_image_path):
+def get_Crop_Letter(wpod_net,image):
 
 	vehicle, LpImg,cor = get_plate(wpod_net,test_image_path)
 	plate_image,gray,blur,binary,thre_mor=DiffImage(LpImg)
@@ -109,7 +109,8 @@ wpod_net = load_model(wpod_net_path)
 
 ### image test
 test_image_path = "Plate_examples/germany_car_plate.jpg"
-test_roi,crop_characters=get_Crop_Letter(wpod_net,test_image_path)
+image=preprocess_image(test_image_path)
+test_roi,crop_characters=get_Crop_Letter(wpod_net,image)
 
 print("Detect {} letters...".format(len(crop_characters)))
 # fig = plt.figure(figsize=(10,6))
