@@ -21,7 +21,7 @@ def get_plate(wpod_net,image, Dmax=608, Dmin=256):
 '''
 ## Obtain plate image and its coordinates from an image
 image_paths = glob.glob("Plate_examples/*.jpg")
-test_image = image_paths[2]
+test_image = image_paths[0]
 wpod_net_path = "wpod-net.json"
 wpod_net = load_model(wpod_net_path)
 image=preprocess_image(test_image)

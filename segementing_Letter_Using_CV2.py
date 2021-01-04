@@ -71,7 +71,7 @@ def sort_contours(cnts,reverse = False):
 
 def get_Crop_Letter(wpod_net,image):
 
-	vehicle, LpImg,cor = get_plate(wpod_net,test_image_path)
+	vehicle, LpImg,cor = get_plate(wpod_net,image)
 	plate_image,gray,blur,binary,thre_mor=DiffImage(LpImg)
 	cont, _  = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
