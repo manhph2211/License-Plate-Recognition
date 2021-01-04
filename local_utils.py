@@ -61,6 +61,8 @@ class Label:
     def set_prob(self, prob):
         self.__prob = prob
 
+
+
 class DLabel(Label):
     def __init__(self, cl, pts, prob):
         self.pts = pts
