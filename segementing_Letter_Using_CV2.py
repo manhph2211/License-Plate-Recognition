@@ -101,7 +101,7 @@ def get_Crop_Letter(wpod_net,test_image_path):
 	return test_roi,crop_characters
 	
 ## test getCropLetters
-
+'''
 ### load model
 wpod_net_path = "wpod-net.json"
 wpod_net = load_model(wpod_net_path)
@@ -112,7 +112,20 @@ test_image_path = "Plate_examples/germany_car_plate.jpg"
 test_roi,crop_characters=get_Crop_Letter(wpod_net,test_image_path)
 
 print("Detect {} letters...".format(len(crop_characters)))
-fig = plt.figure(figsize=(10,6))
-plt.axis(False)
-plt.imshow(test_roi)
+# fig = plt.figure(figsize=(10,6))
+# plt.axis(False)
+# plt.imshow(test_roi)
+# plt.show()
+
+
+fig = plt.figure(figsize=(14,4))
+grid = gridspec.GridSpec(ncols=len(crop_characters),nrows=1,figure=fig)
+print(grid)
+for i in range(len(crop_characters)):
+    fig.add_subplot(grid[i])
+    plt.axis(False)
+    plt.imshow(crop_characters[i],cmap="gray")
 plt.show()
+#plt.savefig("segmented_leter.png",dpi=300)    
+
+'''
