@@ -22,6 +22,7 @@ This is my final project in technical thinking sub, it's mainly depended on [thi
 
 ## 3. Result
 
+![alt text](https://github.com/manhph2211/License-Plate-Reco/blob/last/test.png)
 
 ## 4. Todo
 
