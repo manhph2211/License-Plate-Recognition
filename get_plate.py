@@ -1,14 +1,17 @@
-import cv2
-import glob
-import matplotlib.pyplot as plt
-from os.path import splitext,basename
 from local_utils import detect_lp
-from transfer import load_model
-from preprocessing import preprocess_image
+
+
+#--- for test ---
+#import cv2
+#import glob
+#import matplotlib.pyplot as plt
+#from os.path import splitext,basename
+#from transfer import load_model
+#from preprocessing import preprocess_image
 
 
 
-def get_plate(wpod_net,image, Dmax=608, Dmin=256):
+def get_plate(wpod_net,image, Dmax=650, Dmin=270):
     vehicle = image
     ratio = float(max(vehicle.shape[:2])) / min(vehicle.shape[:2])
     side = int(ratio * Dmin)

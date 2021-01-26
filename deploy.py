@@ -26,8 +26,9 @@ def predict_from_model(image,model,labels):
   return prediction
 
 
-def demo(img_):
-  img=cv2.imread(img_)
+def demo(img):
+  #img=cv2.imread(img_)
+  #print(img.shape)
   img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
   img = img/255
   wpod_net_path = "wpod-net.json"
@@ -40,10 +41,10 @@ def demo(img_):
   json_file.close()
   model = model_from_json(loaded_model_json)
   model.load_weights("License_character_recognition_weight.h5")
-  print("[INFO] Model loaded successfully...")
+  #print("[INFO] Model loaded successfully...")
   labels = LabelEncoder()
   labels.classes_ = np.load('license_character_classes.npy')
-  print("[INFO] Labels loaded successfully...")
+  #print("[INFO] Labels loaded successfully...")
 
   # pre-processing input images and pedict with model
 
@@ -51,20 +52,23 @@ def demo(img_):
   for character in crop_characters:
     title = np.array2string(predict_from_model(character,model,labels))
     final_string+=title.strip("'[]")
+  print(final_string)
+  return 'Result: '+final_string
 
-  return img_,'Result: '+final_string
-
-
-test_folder= 'Plate_examples'
+test_folder= './TDCN_IMG'
 test_image_paths= [os.path.join(test_folder,x) for x in os.listdir(test_folder)]
 
 iface = gr.Interface(demo, 
-    [ gr.inputs.Radio(test_image_paths)],
-    ['image','text']
+   [ gr.inputs.Image()],
+   ['text']
 )
 
-iface.launch()
-# test_image_path = "Plate_examples/germany_car_plate.jpg"
+iface.launch(share=False)
+
+
+
+# test_image_path = "./TDCN_IMG/0-15/E5A40A0C-6AC1-4517-AFD1-FE5DFA6C2288.jpeg"
 # img=cv2.imread(test_image_path)
-# print(demo(img))
-#  return {'Binary type':binary},{'cropped Characters':crop_characters},{'final result':final_string}
+# plt.imshow(img)
+# plt.show()
+# print(demo(test_image_path))

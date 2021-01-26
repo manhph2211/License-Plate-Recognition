@@ -1,12 +1,13 @@
 import cv2
-import glob
-import matplotlib.pyplot as plt
-from os.path import splitext,basename
 from local_utils import detect_lp
-from transfer import load_model
-from preprocessing import preprocess_image
 from get_plate import get_plate
-import matplotlib.gridspec as gridspec
+#for test
+#from transfer import load_model
+#from preprocessing import preprocess_image
+#import glob
+#import matplotlib.pyplot as plt
+#from os.path import splitext,basename
+#import matplotlib.gridspec as gridspec
 
 
 # 1. see what it looks like in different types: plate_image, gray, blur, binary,thre_mor
@@ -25,7 +26,7 @@ def DiffImage(LpImg):
 	    
 	    kernel3 = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
 	    thre_mor = cv2.morphologyEx(binary, cv2.MORPH_DILATE, kernel3)
-	
+		
 	return plate_image,gray,blur,binary,thre_mor
 	
 ## test DiffImage
@@ -48,7 +49,7 @@ plt.rcParams.update({"font.size":18})
 grid = gridspec.GridSpec(ncols=2,nrows=3,figure = fig)
 plot_image = [plate_image, gray, blur, binary,thre_mor]
 plot_name = ["plate_image","gray","blur","binary","dilation"]
-
+2
 for i in range(len(plot_image)):
     fig.add_subplot(grid[i])
     plt.axis(False)
@@ -74,7 +75,7 @@ def get_Crop_Letter(wpod_net,image):
 	vehicle, LpImg,cor = get_plate(wpod_net,image)
 	plate_image,gray,blur,binary,thre_mor=DiffImage(LpImg)
 	cont, _  = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
+	#print(len(cont))
 	# creat a copy version "test_roi" of plat_image to draw bounding box
 	test_roi = plate_image.copy()
 
@@ -87,17 +88,17 @@ def get_Crop_Letter(wpod_net,image):
 	for c in sort_contours(cont):
 	    (x, y, w, h) = cv2.boundingRect(c)
 	    ratio = h/w
-	    if 1<=ratio<=3.5: # Only select contour with defined ratio
-	        if h/plate_image.shape[0]>=0.5: # Select contour which has the height larger than 50% of the plate
+	    if 1<=ratio<=5: # Only select contour with defined ratio
+	        if h/plate_image.shape[0]>=0.5: # Select contour which has the height larger than XXX% of the plate
 	            # Draw bounding box arroung digit number
-	            cv2.rectangle(test_roi, (x, y), (x + w, y + h), (0, 255,0), 2)
+	            #cv2.rectangle(test_roi, (x, y), (x + w, y + h), (0, 255,0), 2 )
 
 	            # Sperate number and gibe prediction
 	            curr_num = thre_mor[y:y+h,x:x+w]
 	            curr_num = cv2.resize(curr_num, dsize=(digit_w, digit_h))
-	            _, curr_num = cv2.threshold(curr_num, 220, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+	            _, curr_num = cv2.threshold(curr_num, 200, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
 	            crop_characters.append(curr_num)
-
+	print("Detect {} numbers!".format(len(crop_characters)))
 	return test_roi,crop_characters
 	
 ## test getCropLetters

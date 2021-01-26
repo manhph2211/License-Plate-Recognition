@@ -1,9 +1,10 @@
 import cv2
-import glob
-import matplotlib.pyplot as plt
-from os.path import splitext,basename
-from local_utils import detect_lp
-from transfer import load_model
+# for test
+#import glob
+#import matplotlib.pyplot as plt
+#from os.path import splitext,basename
+#from local_utils import detect_lp
+#from transfer import load_model
 
 # 1. 
 def preprocess_image(image_path,resize=False):
@@ -42,8 +43,4 @@ for i in range(cols*rows):
 plt.tight_layout(True)
 plt.show()
 '''
-
-
-# 2. 
-
 

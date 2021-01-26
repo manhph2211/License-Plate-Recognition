@@ -1,10 +1,10 @@
-import cv2
+#import cv2
 import numpy as np
-import matplotlib.pyplot as plt
-from local_utils import detect_lp
+# import matplotlib.pyplot as plt
+#from local_utils import detect_lp
 from os.path import splitext,basename
 from keras.models import model_from_json
-import glob
+# import glob
 
 
 def load_model(path):
@@ -14,7 +14,7 @@ def load_model(path):
             model_json = json_file.read()
         model = model_from_json(model_json, custom_objects={})
         model.load_weights('%s.h5' % path)
-        print("Loading model successfully...")
+        #print("Loading model successfully...")
         return model
     except Exception as e:
         print(e)

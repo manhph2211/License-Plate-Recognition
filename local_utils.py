@@ -1,6 +1,21 @@
 # pylint: disable=invalid-name, redefined-outer-name, missing-docstring, non-parent-init-called, trailing-whitespace, line-too-long
 import cv2
 import numpy as np
+import os
+
+
+def getPath(test_image_root = "./TDCN_IMG/"):
+    
+    path_list={}
+    for i,angle_path in enumerate(os.listdir(test_image_root)):
+        
+        angle = os.path.join(test_image_root,angle_path)
+        path_list[angle_path]=[]
+        for img in os.listdir(angle):
+            path_= os.path.join(angle,img)
+            path_list[angle_path].append(path_)
+    return path_list
+
 
 
 class Label:
