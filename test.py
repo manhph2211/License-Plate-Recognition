@@ -36,7 +36,7 @@ def finalOutput(img_):
   return final_string
 
 
-  
+
 def predict(path_dic):
 	results={}
 	for k,v in path_dic.items():

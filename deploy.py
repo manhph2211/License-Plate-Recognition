@@ -8,7 +8,7 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
-from local_utils import detect_lp
+from local_utils import detect_lp, getPath
 from os.path import splitext,basename
 from keras.models import model_from_json
 from keras.preprocessing.image import load_img, img_to_array
@@ -40,19 +40,28 @@ def getResults(path_result='./results_0_15.json'):
 		return dic
 
 dic=getResults()
+keys=list(getPath().keys())
+paths=[]
+for el in keys[0]:
+	for x in el:
+		paths.append(x[1])
+
+
 
 def demo(img):
-	
+	return "Result: " + dic[img]
+
+
 
 test_folder= './TDCN_IMG'
 test_image_paths= [os.path.join(test_folder,x) for x in os.listdir(test_folder)]
 
-# iface = gr.Interface(demo, 
-#    [ gr.inputs.Image()],
-#    ['text']
-# )
+iface = gr.Interface(demo, 
+   [ gr.inputs.gradio(paths)],
+   ['text']
+)
 
-# iface.launch(share=False)
+iface.launch(share=False)
 
 
 
