@@ -29,27 +29,29 @@ def predict_from_model(image,model,labels):
 
 
 def getResults(path_result='./results_0_15.json'):
-	with open(path,'r') as f:
+	with open(path_result,'r') as f:
 		results=json.load(f)
 		dic={}
 		for k,v in results.items():
-			true_val=v[0][0]
-			path=v[0][1]
-			predict_value=v[1]
-			dic[path]=predict_value
+			for x in v:
+				true_val=x[0][0]
+				path=x[0][1]
+				predict_value=x[1]
+				dic[path]=predict_value
 		return dic
 
-dic=getResults()
-keys=list(getPath().keys())
+dic_=getResults()
+values=list(getPath().values())
 paths=[]
-for el in keys[0]:
-	for x in el:
-		paths.append(x[1])
+for el in values[0]:
+	
+	paths.append(el[1])
 
-
+#print(dic_)
 
 def demo(img):
-	return "Result: " + dic[img]
+	global dic_
+	return "Result: " + dic_[img]
 
 
 
@@ -57,7 +59,7 @@ test_folder= './TDCN_IMG'
 test_image_paths= [os.path.join(test_folder,x) for x in os.listdir(test_folder)]
 
 iface = gr.Interface(demo, 
-   [ gr.inputs.gradio(paths)],
+   [ gr.inputs.Radio(paths)],
    ['text']
 )
 
