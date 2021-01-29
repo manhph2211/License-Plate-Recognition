@@ -17,6 +17,8 @@ from sklearn.preprocessing import LabelEncoder
 import glob
 from segementing_Letter_Using_CV2 import DiffImage,sort_contours,get_Crop_Letter
 from get_plate import get_plate
+import json
+
 
 
 def predict_from_model(image,model,labels):
@@ -26,34 +28,21 @@ def predict_from_model(image,model,labels):
   return prediction
 
 
-def demo(img_):
-  img=cv2.imread(img_)
-  #print(img.shape)
-  img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-  img = img/255
-  wpod_net_path = "wpod-net.json"
-  wpod_net = load_model(wpod_net_path)
-  test_roi,crop_characters=get_Crop_Letter(wpod_net,img)
-  #load pretrained
-  #Load model architecture, weight and labels
-  json_file = open('MobileNets_character_recognition.json', 'r')
-  loaded_model_json = json_file.read()
-  json_file.close()
-  model = model_from_json(loaded_model_json)
-  model.load_weights("License_character_recognition_weight.h5")
-  #print("[INFO] Model loaded successfully...")
-  labels = LabelEncoder()
-  labels.classes_ = np.load('license_character_classes.npy')
-  #print("[INFO] Labels loaded successfully...")
+def getResults(path_result='./results_0_15.json'):
+	with open(path,'r') as f:
+		results=json.load(f)
+		dic={}
+		for k,v in results.items():
+			true_val=v[0][0]
+			path=v[0][1]
+			predict_value=v[1]
+			dic[path]=predict_value
+		return dic
 
-  # pre-processing input images and pedict with model
+dic=getResults()
 
-  final_string = ''
-  for character in crop_characters:
-    title = np.array2string(predict_from_model(character,model,labels))
-    final_string+=title.strip("'[]")
-  #print(final_string)
-  return final_string
+def demo(img):
+	
 
 test_folder= './TDCN_IMG'
 test_image_paths= [os.path.join(test_folder,x) for x in os.listdir(test_folder)]
