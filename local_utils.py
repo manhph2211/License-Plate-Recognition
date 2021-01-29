@@ -10,10 +10,12 @@ def getPath(test_image_root = "./TDCN_IMG/"):
     for i,angle_path in enumerate(os.listdir(test_image_root)):
         
         angle = os.path.join(test_image_root,angle_path)
+
+
         path_list[angle_path]=[]
         for img in os.listdir(angle):
             path_= os.path.join(angle,img)
-            path_list[angle_path].append(path_)
+            path_list[angle_path].append([img.strip('.jpeg'),path_])
     return path_list
 
 

@@ -26,8 +26,8 @@ def predict_from_model(image,model,labels):
   return prediction
 
 
-def demo(img):
-  #img=cv2.imread(img_)
+def demo(img_):
+  img=cv2.imread(img_)
   #print(img.shape)
   img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
   img = img/255
@@ -52,18 +52,18 @@ def demo(img):
   for character in crop_characters:
     title = np.array2string(predict_from_model(character,model,labels))
     final_string+=title.strip("'[]")
-  print(final_string)
-  return 'Result: '+final_string
+  #print(final_string)
+  return final_string
 
 test_folder= './TDCN_IMG'
 test_image_paths= [os.path.join(test_folder,x) for x in os.listdir(test_folder)]
 
-iface = gr.Interface(demo, 
-   [ gr.inputs.Image()],
-   ['text']
-)
+# iface = gr.Interface(demo, 
+#    [ gr.inputs.Image()],
+#    ['text']
+# )
 
-iface.launch(share=False)
+# iface.launch(share=False)
 
 
 
