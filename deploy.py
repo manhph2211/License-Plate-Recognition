@@ -20,7 +20,6 @@ from get_plate import get_plate
 import json
 
 
-
 def getResults(path_result='./results_0_15.json'):
 	with open(path_result,'r') as f:
 		results=json.load(f)
@@ -33,27 +32,31 @@ def getResults(path_result='./results_0_15.json'):
 				dic[path]=predict_value
 		return dic
 
+
+wpod_net_path = "wpod-net.json"
+wpod_net = load_model(wpod_net_path)
+
 # local host
 def demo(img):
-	global dic_
+	dic_=getResults()
+	img_ =cv2.imread(img)
+	return img_,"Result: " + dic_[img]
 
-	return "Result: " + dic_[img]
 
-
-
-dic_=getResults()
 values=list(getPath().values())
-paths=[el[1] for el in values[0]]
+paths=[el[1] for el1 in values for el in el1]
+angles=['0-15','15-30','30-45','45-60','60-75']
+
 
 iface = gr.Interface(demo, 
    [ gr.inputs.Radio(paths)],
-   ['text','image']
+   ['image','text']
 )
 
 iface.launch(share=False)
 
 
-
+# gr.inputs.Image(...)
 
 # test_folder= './TDCN_IMG'
 # test_image_paths= [os.path.join(test_folder,x) for x in os.listdir(test_folder)]

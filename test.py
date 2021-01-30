@@ -65,7 +65,7 @@ def predict(path_dic):
 	for k,v in path_dic.items():
 		results[k]=[]
     
-		print("Angle ",k)
+		print("\nAngle ",k)
 		for i,path in enumerate(v):
 			result=finalOutput(path[1])
 			print("IMAGE {0} - {1} ---------> {2}".format(i+1,path[0],result))
@@ -78,3 +78,10 @@ def predict(path_dic):
 # with open('results_0_15.json','w') as f:
 # 	json.dump(results,f,indent=4)
 
+
+# iface = gr.Interface(finalOutput, 
+#    [ gr.inputs.Image()],
+#    ['text']
+# )
+
+#iface.launch(share=False)
