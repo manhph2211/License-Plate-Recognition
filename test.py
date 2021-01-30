@@ -20,13 +20,11 @@ from get_plate import get_plate
 import json
 
 
-
 def predict_from_model(image,model,labels):
   image = cv2.resize(image,(80,80))
   image = np.stack((image,)*3, axis=-1)
   prediction = labels.inverse_transform([np.argmax(model.predict(image[np.newaxis,:]))])
   return prediction
-
 
 
 def finalOutput(img_):
@@ -73,10 +71,10 @@ def predict(path_dic):
       
 	return results
 
-results=predict(getPath())
+# results=predict(getPath())
 
-with open('results_0_15.json','w') as f:
-	json.dump(results,f,indent=4)
+# with open('results_0_15.json','w') as f:
+# 	json.dump(results,f,indent=4)
 
 
 # iface = gr.Interface(finalOutput, 
