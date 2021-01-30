@@ -21,9 +21,8 @@ This is my final project in technical thinking sub> Thanks to [this amazing tuto
 
 
 ## 3. Result
-
 ![alt text](https://github.com/manhph2211/License-Plate-Reco/blob/last/test.png)
-![caption](https://github.com/manhph2211/License-Plate-Reco/blob/last/demo.webm)
+
 ## 4. Todo
 
 - Improve/optimize the detecting time as well as the acc
