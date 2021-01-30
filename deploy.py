@@ -21,13 +21,6 @@ import json
 
 
 
-def predict_from_model(image,model,labels):
-  image = cv2.resize(image,(80,80))
-  image = np.stack((image,)*3, axis=-1)
-  prediction = labels.inverse_transform([np.argmax(model.predict(image[np.newaxis,:]))])
-  return prediction
-
-
 def getResults(path_result='./results_0_15.json'):
 	with open(path_result,'r') as f:
 		results=json.load(f)
@@ -40,35 +33,27 @@ def getResults(path_result='./results_0_15.json'):
 				dic[path]=predict_value
 		return dic
 
-dic_=getResults()
-values=list(getPath().values())
-paths=[]
-for el in values[0]:
-	
-	paths.append(el[1])
-
-#print(dic_)
-
+# local host
 def demo(img):
 	global dic_
+
 	return "Result: " + dic_[img]
 
 
 
-test_folder= './TDCN_IMG'
-test_image_paths= [os.path.join(test_folder,x) for x in os.listdir(test_folder)]
+dic_=getResults()
+values=list(getPath().values())
+paths=[el[1] for el in values[0]]
 
 iface = gr.Interface(demo, 
    [ gr.inputs.Radio(paths)],
-   ['text']
+   ['text','image']
 )
 
 iface.launch(share=False)
 
 
 
-# test_image_path = "./TDCN_IMG/0-15/E5A40A0C-6AC1-4517-AFD1-FE5DFA6C2288.jpeg"
-# img=cv2.imread(test_image_path)
-# plt.imshow(img)
-# plt.show()
-# print(demo(test_image_path))
+
+# test_folder= './TDCN_IMG'
+# test_image_paths= [os.path.join(test_folder,x) for x in os.listdir(test_folder)]

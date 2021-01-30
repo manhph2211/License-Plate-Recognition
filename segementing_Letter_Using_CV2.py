@@ -2,12 +2,12 @@ import cv2
 from local_utils import detect_lp
 from get_plate import get_plate
 #for test
-#from transfer import load_model
-#from preprocessing import preprocess_image
-#import glob
-#import matplotlib.pyplot as plt
-#from os.path import splitext,basename
-#import matplotlib.gridspec as gridspec
+# from transfer import load_model
+# from preprocessing import preprocess_image
+# import glob
+# import matplotlib.pyplot as plt
+# from os.path import splitext,basename
+# import matplotlib.gridspec as gridspec
 
 
 # 1. see what it looks like in different types: plate_image, gray, blur, binary,thre_mor
@@ -29,8 +29,51 @@ def DiffImage(LpImg):
 		
 	return plate_image,gray,blur,binary,thre_mor
 	
-## test DiffImage
 
+
+# Create sort_contours() function to grab the contour of each digit from left to right
+def sort_contours(cnts,reverse = False):
+    i = 0
+    boundingBoxes = [cv2.boundingRect(c) for c in cnts]
+    (cnts, boundingBoxes) = zip(*sorted(zip(cnts, boundingBoxes),
+                                        key=lambda b: b[1][i], reverse=reverse))
+    return cnts
+
+
+def get_Crop_Letter(wpod_net,image):
+
+	vehicle, LpImg,cor = get_plate(wpod_net,image)
+	plate_image,gray,blur,binary,thre_mor=DiffImage(LpImg)
+	cont, _  = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+	#print(len(cont))
+	# creat a copy version "test_roi" of plat_image to draw bounding box
+	test_roi = plate_image.copy()
+
+	# Initialize a list which will be used to append charater image
+	crop_characters = []
+
+	# define standard width and height of character
+	digit_w, digit_h = 30, 60
+
+	for c in sort_contours(cont):
+	    (x, y, w, h) = cv2.boundingRect(c)
+	    ratio = h/w
+	    if 1<=ratio<=5: # Only select contour with defined ratio
+	        if h/plate_image.shape[0]>=0.5: # Select contour which has the height larger than XXX% of the plate
+	            # Draw bounding box arroung digit number
+	            cv2.rectangle(test_roi, (x, y), (x + w, y + h), (0, 255,0), 2 )
+
+	            # Sperate number and gibe prediction
+	            curr_num = thre_mor[y:y+h,x:x+w]
+	            curr_num = cv2.resize(curr_num, dsize=(digit_w, digit_h))
+	            _, curr_num = cv2.threshold(curr_num, 200, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+	            crop_characters.append(curr_num)
+	#print("Detect {} numbers!".format(len(crop_characters)))
+	return test_roi,crop_characters
+	
+
+
+## test DiffImage
 
 ### load model
 '''
@@ -62,72 +105,32 @@ plt.show()
 '''
 
 
-# Create sort_contours() function to grab the contour of each digit from left to right
-def sort_contours(cnts,reverse = False):
-    i = 0
-    boundingBoxes = [cv2.boundingRect(c) for c in cnts]
-    (cnts, boundingBoxes) = zip(*sorted(zip(cnts, boundingBoxes),
-                                        key=lambda b: b[1][i], reverse=reverse))
-    return cnts
-
-def get_Crop_Letter(wpod_net,image):
-
-	vehicle, LpImg,cor = get_plate(wpod_net,image)
-	plate_image,gray,blur,binary,thre_mor=DiffImage(LpImg)
-	cont, _  = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-	#print(len(cont))
-	# creat a copy version "test_roi" of plat_image to draw bounding box
-	test_roi = plate_image.copy()
-
-	# Initialize a list which will be used to append charater image
-	crop_characters = []
-
-	# define standard width and height of character
-	digit_w, digit_h = 30, 60
-
-	for c in sort_contours(cont):
-	    (x, y, w, h) = cv2.boundingRect(c)
-	    ratio = h/w
-	    if 1<=ratio<=5: # Only select contour with defined ratio
-	        if h/plate_image.shape[0]>=0.5: # Select contour which has the height larger than XXX% of the plate
-	            # Draw bounding box arroung digit number
-	            #cv2.rectangle(test_roi, (x, y), (x + w, y + h), (0, 255,0), 2 )
-
-	            # Sperate number and gibe prediction
-	            curr_num = thre_mor[y:y+h,x:x+w]
-	            curr_num = cv2.resize(curr_num, dsize=(digit_w, digit_h))
-	            _, curr_num = cv2.threshold(curr_num, 200, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-	            crop_characters.append(curr_num)
-	print("Detect {} numbers!".format(len(crop_characters)))
-	return test_roi,crop_characters
-	
 ## test getCropLetters
-'''
+
 ### load model
-wpod_net_path = "wpod-net.json"
-wpod_net = load_model(wpod_net_path)
+# wpod_net_path = "wpod-net.json"
+# wpod_net = load_model(wpod_net_path)
 
 
 ### image test
-test_image_path = "Plate_examples/germany_car_plate.jpg"
-image=preprocess_image(test_image_path)
-test_roi,crop_characters=get_Crop_Letter(wpod_net,image)
+# test_image_path = "TDCN_IMG/0-15/30E08813.jpg"
+# image=preprocess_image(test_image_path)
+# test_roi,crop_characters=get_Crop_Letter(wpod_net,image)
 
-print("Detect {} letters...".format(len(crop_characters)))
+# print("Detect {} letters...".format(len(crop_characters)))
 # fig = plt.figure(figsize=(10,6))
 # plt.axis(False)
 # plt.imshow(test_roi)
 # plt.show()
 
 
-fig = plt.figure(figsize=(14,4))
-grid = gridspec.GridSpec(ncols=len(crop_characters),nrows=1,figure=fig)
-print(grid)
-for i in range(len(crop_characters)):
-    fig.add_subplot(grid[i])
-    plt.axis(False)
-    plt.imshow(crop_characters[i],cmap="gray")
-plt.show()
+# fig = plt.figure(figsize=(14,4))
+# grid = gridspec.GridSpec(ncols=len(crop_characters),nrows=1,figure=fig)
+# print(grid)
+# for i in range(len(crop_characters)):
+#     fig.add_subplot(grid[i])
+#     plt.axis(False)
+#     plt.imshow(crop_characters[i],cmap="gray")
+# plt.show()
 #plt.savefig("segmented_leter.png",dpi=300)    
 
-'''

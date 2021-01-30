@@ -1,8 +1,31 @@
 from local_utils import getPath
-import numpy as np 
-import sys
 import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+from transfer import load_model
+from preprocessing import preprocess_image
+# required library
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.gridspec as gridspec
+from local_utils import detect_lp, getPath
+from os.path import splitext,basename
+from keras.models import model_from_json
+from keras.preprocessing.image import load_img, img_to_array
+from keras.applications.mobilenet_v2 import preprocess_input
+from sklearn.preprocessing import LabelEncoder
+import glob
+from segementing_Letter_Using_CV2 import DiffImage,sort_contours,get_Crop_Letter
+from get_plate import get_plate
 import json
+
+
+
+def predict_from_model(image,model,labels):
+  image = cv2.resize(image,(80,80))
+  image = np.stack((image,)*3, axis=-1)
+  prediction = labels.inverse_transform([np.argmax(model.predict(image[np.newaxis,:]))])
+  return prediction
 
 
 
@@ -41,12 +64,13 @@ def predict(path_dic):
 	results={}
 	for k,v in path_dic.items():
 		results[k]=[]
+    
 		print("Angle ",k)
 		for i,path in enumerate(v):
-			re=finalOutput(path[1])
-			print("IMAGE {0} - {1} ---------> {2}".format(i+1,path[0],re))
-			results[k].append([path,re])
-
+			result=finalOutput(path[1])
+			print("IMAGE {0} - {1} ---------> {2}".format(i+1,path[0],result))
+			results[k].append([path,result])
+      
 	return results
 
 # results=predict(getPath())
