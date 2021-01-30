@@ -22,7 +22,6 @@ This is my final project in technical thinking sub> Thanks to [this amazing tuto
 
 ## 3. Result
 ![alt text](https://github.com/manhph2211/License-Plate-Reco/blob/last/test.png)
-[![Alt text for your video](doc/screenshot_youtube.PNG)](https://github.com/manhph2211/License-Plate-Reco/blob/last/demo.webm)
 
 ## 4. Todo :sleepy:
 
