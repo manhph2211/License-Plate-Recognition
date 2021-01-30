@@ -73,10 +73,10 @@ def predict(path_dic):
       
 	return results
 
-# results=predict(getPath())
+results=predict(getPath())
 
-# with open('results_0_15.json','w') as f:
-# 	json.dump(results,f,indent=4)
+with open('results_0_15.json','w') as f:
+	json.dump(results,f,indent=4)
 
 
 # iface = gr.Interface(finalOutput, 
