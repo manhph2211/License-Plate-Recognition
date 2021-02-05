@@ -15,14 +15,14 @@ This is my final project in technical thinking sub> Thanks to [this amazing tuto
 
 ## 2. Usage 
 
-- Just run `python3 deploy.py`  to try the application in your local host(I just used gradio for deployment). However, this might require quite a long time...
+- Just run `python3 deploy.py`  to try the application in your local host(I just used gradio for the deployment)...
 
-- Or you can run `python3 test.py` to get license plates right from the terminal.
+- Or you can run `python3 test.py` to get all license plates right from the terminal.
 
 
 ## 3. Result
 
-![alt text](https://github.com/manhph2211/License-Plate-Reco/blob/last/test.png)
+- ![alt text](https://github.com/manhph2211/License-Plate-Reco/blob/last/test.png)
 
 ## 4. Todo
 
